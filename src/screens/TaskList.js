@@ -25,9 +25,21 @@ export default class TaskList extends Component {
             doneAt: null,
         }]
     }
+    
+    toggleTask = taskId => {
+        const tasks = [...this.state.tasks]
+        tasks.forEach(task => {
+            if(task.id === taskId) {
+                task.doneAt = task.doneAt ? null : new Date()
+            }
+        })
+
+        this.setState({ tasks })
+    }
 
     render() {
         const today = moment().locale('pt-br').format('ddd, D [de] MMMM')
+        
         return (
         <Container>
             <ImageBackground source={todayImage}>
@@ -39,7 +51,7 @@ export default class TaskList extends Component {
             <List>
                 <FlatList data={this.state.tasks} // Passa como parâmetro/atributo a lista de objetos JavaScripts puro
                     keyExtractor={item => `${item.id}`} // Pega o id de cada objeto de forma correta para a renderização
-                    renderItem={({item}) => <Task {...item} />} /* Recebe o Item (desestruturado do objeto) e passa cada um dos atributos para Task usando o operador Spread */ /> 
+                    renderItem={({item}) => <Task {...item} toggleTask={this.toggleTask} />} /* Recebe o Item (desestruturado do objeto) e passa cada um dos atributos para Task usando o operador Spread */ /> 
             </List> 
         </Container>
         )
