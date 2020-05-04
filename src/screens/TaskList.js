@@ -1,5 +1,5 @@
-import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, { Component } from 'react'
+import { View, Text, StyleSheet, FlatList } from 'react-native'
 import { Container, ImageBackground, List, TitleBar } from '../styles'
 
 import commonStyles from '../commonStyles'
@@ -10,10 +10,25 @@ import 'moment/locale/pt-br'
 
 import Task from '../components/Task'
 
-const TaskList = () => {
-    const today = moment().locale('pt-br').format('ddd, D [de] MMMM')
+export default class TaskList extends Component {
 
-    return (
+    state = {
+        tasks: [{
+            id: Math.random(),
+            desc: 'Comprar Livro de React Native',
+            estimateAt: new Date(),
+            doneAt: new Date(),
+        }, {
+            id: Math.random(),
+            desc: 'Ler Livro de React Native',
+            estimateAt: new Date(),
+            doneAt: null,
+        }]
+    }
+
+    render() {
+        const today = moment().locale('pt-br').format('ddd, D [de] MMMM')
+        return (
         <Container>
             <ImageBackground source={todayImage}>
                 <TitleBar>
@@ -22,16 +37,14 @@ const TaskList = () => {
                 </TitleBar>
             </ImageBackground>
             <List>
-                <Task desc="Comprar Livro" estimateAt={new Date()}
-                    doneAt={new Date()}/>
-                <Task desc="Ler Livro" estimateAt={new Date()}
-                    doneAt={null}/>
+                <FlatList data={this.state.tasks} // Passa como parâmetro/atributo a lista de objetos JavaScripts puro
+                    keyExtractor={item => `${item.id}`} // Pega o id de cada objeto de forma correta para a renderização
+                    renderItem={({item}) => <Task {...item} />} /* Recebe o Item (desestruturado do objeto) e passa cada um dos atributos para Task usando o operador Spread */ /> 
             </List> 
         </Container>
-    )
+        )
+    }
 }
-
-export default TaskList
 
 const styles = StyleSheet.create({
     title: {
