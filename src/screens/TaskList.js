@@ -15,6 +15,7 @@ import Task from '../components/Task'
 export default class TaskList extends Component {
     state = {
         showDoneTasks: true,
+        visibleTaks: [],
 
         tasks: [{
             id: Math.random(),
@@ -28,8 +29,25 @@ export default class TaskList extends Component {
             doneAt: null,
         }]
     }
+
+    componentDidMount = () => {
+        this.filterTasks()
+    }
+ 
     toggleFilter = () => {
-        this.setState({ showDoneTasks: !this.state.showDoneTasks })
+        this.setState({ showDoneTasks: !this.state.showDoneTasks }, this.filterTasks)
+    }
+
+    filterTasks = () => {
+        let visibleTaks = null
+        if(this.state.showDoneTasks) {
+            visibleTaks = [ ...this.state.tasks ]
+        } else {
+            const pending = task => task.doneAt === null
+            visibleTaks = this.state.tasks.filter(pending)
+        }
+
+        this.setState({ visibleTaks })
     }
 
     toggleTask = taskId => {
@@ -40,7 +58,7 @@ export default class TaskList extends Component {
             }
         })
 
-        this.setState({ tasks })
+        this.setState({ tasks }, this.filterTasks)
     }
 
     render() {
@@ -61,7 +79,7 @@ export default class TaskList extends Component {
                 </TitleBar>
             </ImageBackground>
             <List>
-                <FlatList data={this.state.tasks} // Passa como parâmetro/atributo a lista de objetos JavaScripts puro
+                <FlatList data={this.state.visibleTaks} // Passa como parâmetro/atributo a lista de objetos JavaScripts puro
                     keyExtractor={item => `${item.id}`} // Pega o id de cada objeto de forma correta para a renderização
                     renderItem={({item}) => <Task {...item} toggleTask={this.toggleTask} />} /* Recebe o Item (desestruturado do objeto) e passa cada um dos atributos para Task usando o operador Spread */ /> 
             </List> 
