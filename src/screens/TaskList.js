@@ -1,5 +1,13 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Platform, Alert } from 'react-native'
+import { 
+    View,
+    Text, 
+    StyleSheet, 
+    FlatList, 
+    TouchableOpacity, 
+    Platform, 
+    Alert
+} from 'react-native'
 import { Container, ImageBackground, List, TitleBar } from '../styles'
 
 import commonStyles from '../commonStyles'
